@@ -1,0 +1,263 @@
+package telas;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
+import javax.swing.JTextField;
+
+import manipulaColecao.ManipulacaoDeFicheiros;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+public class Cliente {
+
+	public static final int NORMAl = 0;
+	JFrame frame;
+	private static JTextField valor1;
+	private static JTextField valor2;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Cliente window = new Cliente();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Cliente() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	
+	static JButton btnNewButton_2 = new JButton("DEPOSITAR");
+	static JLabel lblNewLabel_1 = new JLabel("Valor a depositar:");
+	static JButton btnNewButton_2_1 = new JButton("SACAR");
+	static JLabel lblNewLabel_1_1 = new JLabel("Valor a sacar:");
+	static JLabel saldo = new JLabel("Saldo:");
+	static JLabel nome = new JLabel("Nome");
+	
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 681, 440);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(0, 58, 665, 343);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(0, 0, 252, 343);
+		panel.add(panel_2);
+		panel_2.setLayout(new GridLayout(2, 1));
+		
+		JButton btnNewButton = new JButton("Depositar Dinheiro");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				desativarLevantamento();
+				ativarDeposito();
+			}
+		});
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 21));
+		panel_2.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Sacar Dinheiro");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				desativarDeposito();
+				ativarLevantamento();
+			}
+		});
+		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 21));
+		panel_2.add(btnNewButton_1);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(262, 0, 403, 343);
+		panel.add(panel_3);
+		panel_3.setLayout(new GridLayout(2, 1, 0, 0));
+		
+		JPanel deposito = new JPanel();
+		panel_3.add(deposito);
+		deposito.setLayout(null);
+		
+		
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel_1.setBounds(10, 39, 138, 33);
+		deposito.add(lblNewLabel_1);
+		
+		valor1 = new JTextField();
+		valor1.setBounds(158, 39, 196, 33);
+		deposito.add(valor1);
+		valor1.setColumns(10);		
+		deposito.add(btnNewButton_2);
+		
+		
+		JPanel levantamento = new JPanel();
+		panel_3.add(levantamento);
+		levantamento.setLayout(null);
+		levantamento.add(btnNewButton_2_1);
+		
+		valor2 = new JTextField();
+		valor2.setColumns(10);
+		valor2.setBounds(158, 32, 196, 33);
+		levantamento.add(valor2);
+		
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel_1_1.setBounds(10, 32, 138, 33);
+		levantamento.add(lblNewLabel_1_1);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setBounds(0, 0, 665, 47);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Nome:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel.setBounds(10, 11, 54, 25);
+		panel_1.add(lblNewLabel);
+		
+		nome.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		nome.setBounds(73, 11, 233, 25);
+		panel_1.add(nome);
+		
+		saldo.setForeground(Color.GREEN);
+		saldo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		saldo.setBounds(535, 11, 120, 25);
+		panel_1.add(saldo);
+		
+		JLabel lblSaldor = new JLabel("Saldo (R$):");
+		lblSaldor.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblSaldor.setBounds(437, 11, 90, 25);
+		panel_1.add(lblSaldor);
+		
+		desativarDeposito();
+		desativarLevantamento();
+		
+		
+		//validacao do novo saldo depois do deposito
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (Double.parseDouble(valor1.getText()) > 0 ) {
+					double calc= Double.parseDouble(valor1.getText()) + Double.parseDouble(saldo.getText()) ;
+					saldo.setText(""+calc);
+				}else {
+					JOptionPane.showMessageDialog(null, "valor invalido");
+				}
+				
+			}
+		});
+		btnNewButton_2.setBounds(158, 83, 196, 33);
+		
+
+		btnNewButton_2_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if ((Double.parseDouble(valor1.getText()) <=  Double.parseDouble(saldo.getText()))) {
+					double calc= Double.parseDouble(valor1.getText()) + Double.parseDouble(saldo.getText()) ;
+					saldo.setText(""+calc);
+				}else {
+					JOptionPane.showMessageDialog(null, "valor invalido");
+				}
+			}
+		});
+		
+		btnNewButton_2_1.setBounds(158, 76, 196, 33);
+	}
+
+	
+	//metodo pra desativar campos do deposito
+	public static void desativarDeposito() {
+		btnNewButton_2.setEnabled(false);
+		valor1.setEnabled(false);
+		lblNewLabel_1.setEnabled(false);
+	}
+	
+	//metodo pra desativar campos do Levantamento
+	public static void desativarLevantamento() {
+		btnNewButton_2_1.setEnabled(false);
+		valor2.setEnabled(false);
+		lblNewLabel_1_1.setEnabled(false);
+	}
+	
+	//metodo pra desativar campos do deposito
+	public static void ativarDeposito() {
+		btnNewButton_2.setEnabled(true);
+		valor1.setEnabled(true);
+		lblNewLabel_1.setEnabled(true);
+	}
+	
+	//metodo pra desativar campos do Levantamento
+	public static void ativarLevantamento() {
+		btnNewButton_2_1.setEnabled(true);
+		valor2.setEnabled(true);
+		lblNewLabel_1_1.setEnabled(true);
+	}
+	
+	
+	//recer dados da outra tela
+
+	public static void recebe(String saldos, String nomes) {
+		saldo.setText(saldos);
+		nome.setText(nomes);		
+	}
+	
+	
+	//define novo saldo do cliente
+	public static void novoSaldo(double novoSaldo) {
+		ArrayList<Object>  list = ManipulacaoDeFicheiros.lerArquivoBinario("Administracao.txt");
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
