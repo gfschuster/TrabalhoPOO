@@ -1,0 +1,1 @@
+Este projeto foi desenvolvido como parte da disciplina de Programação Orientada a Objetos na Universidade Federal de Santa Maria (UFSM) e tem o propósito educacional de aplicar os conceitos aprendidos em sala de aula.
